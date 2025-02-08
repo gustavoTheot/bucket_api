@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: unless-stopped
+    command: server /data --console-address ":9002"
+    env_file:
+      - .env  
+    ports:
+      - "9000:9000"
+      - "9002:9002"
+    volumes:
+      -  minio_data:/data
+    networks:
+      - minio_stack
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+
+networks:
+  minio_stack:
+volumes:
+  mongodb_data:
+  minio_data:
